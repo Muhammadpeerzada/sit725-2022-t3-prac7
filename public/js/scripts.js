@@ -1,30 +1,25 @@
-const cardList = [
-    {
-        title: "Hammer",
-        image: "images/hammer.png",
-        link: "About Hammer",
-        desciption: "Demo desciption about Hammer"
-    },
-    {
-        title: "Screwdriver",
-        image: "images/screwdriver.png",
-        link: "About Screwdriver",
-        desciption: "Demo desciption about Screwdriver"
-    }
-]
+//Cards
+// const cardList = [
+//     {
+//         title: "Hammer",
+//         image: "images/hammer.png",
+//         link: "About Hammer",
+//         desciption: "Demo desciption about Hammer"
+//     },
+//     {
+//         title: "Screwdriver",
+//         image: "images/screwdriver.png",
+//         link: "About Screwdriver",
+//         desciption: "Demo desciption about Screwdriver"
+//     }
+// ]
 
-const clickMe = () => {
-    alert("Thanks for clicking me. Hope you have a nice day!")
-}
-
-const submitForm = () => {
-    let formData = {};
-    formData.first_name = $('#first_name').val();
-    formData.last_name = $('#last_name').val();
-    formData.password = $('#password').val();
-    formData.email = $('#email').val();
-
-    console.log("Form Data Submitted: ", formData);
+const getCards = () => {
+    $.get('/api/cards',(response) => {
+        if(response.statusCode==200){
+            addCards(response.data);
+        }
+    })
 }
 
 const addCards = (items) => {
@@ -42,6 +37,37 @@ const addCards = (items) => {
 }
 
 
+//Modal Form
+const submitForm = () => {
+    let formData = {};
+    formData.title = $('#title').val();
+    formData.image = $('#image').val();
+    formData.link = $('#link').val();
+    formData.description = $('#description').val();
+
+    console.log("Form Data Submitted: ", formData);
+    submitCardToDB(formData);
+    console.log("Form Data Submitted!");
+}
+
+//Ajax Function for sending card information to MongoDB...
+const submitCardToDB = (card) => {
+    $.ajax({
+        url: '/api/cards',
+        data: card,
+        type: 'POST',
+        success: (result) => {
+            alert("Added a new Tool!");
+            location.reload();
+        }
+    })
+    console.log("Submitting new Card...");
+}
+
+// const clickMe = () => {
+//     alert("Thanks for clicking me. Hope you have a nice day!")
+// }
+
 
 $(document).ready(function(){
     $('.materialboxed').materialbox();
@@ -49,5 +75,5 @@ $(document).ready(function(){
         submitForm();
     })
     $('.modal').modal();
-    addCards(cardList);
+    getCards();
   });
