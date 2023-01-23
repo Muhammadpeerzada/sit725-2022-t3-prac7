@@ -4,23 +4,16 @@ let projectCollection = client.db("DB").collection("Tools");
 
 //Some Database Functions...
 //Insert some cards...
-const insertCard = (card, callback) => {
-    projectCollection.insertOne(card, (err) => {
-        if (err) {
-            console.log("Error Message: \n" + err);
-        } else {
-            console.log("Card successfully inserted!")
-        }
-    });
+const insertCard = (card, callback) =>{
+    projectCollection.insertOne(card, callback);
 }
 
 
 //Find some cards...
-const getCard = (callback) => {
+const getCard = (callback) =>{
     projectCollection.find({}).toArray(callback);
 }
 
 module.exports = {
-    insertCard,
-    getCard
+    insertCard, getCard
 }
